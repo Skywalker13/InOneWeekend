@@ -59,3 +59,51 @@ export class color extends vec3 {
     return this.e[0];
   }
 }
+
+export class vec3u {
+  static str(out, v) {
+    return out(`${v.e[0]} ${v.e[1]} ${v.e[2]}`);
+  }
+
+  static add(u, v) {
+    return new vec3(u.e[0] + v.e[0], u.e[1] + v.e[1], u.e[2] + v.e[2]);
+  }
+
+  static sub(u, v) {
+    return new vec3(u.e[0] - v.e[0], u.e[1] - v.e[1], u.e[2] - v.e[2]);
+  }
+
+  static mul(ut, vt) {
+    let u = ut;
+    let v = vt;
+
+    if (typeof ut === "number") {
+      u = [ut, ut, ut];
+    }
+    if (typeof vt === "number") {
+      v = [vt, vt, vt];
+    }
+
+    return new vec3(u.e[0] * v.e[0], u.e[1] * v.e[1], u.e[2] * v.e[2]);
+  }
+
+  static div(v, t) {
+    return vec3u.mul(1 / t, v);
+  }
+
+  static dot(u, v) {
+    return u.e[0] * v.e[0] + u.e[1] * v.e[1] + u.e[2] * v.e[2];
+  }
+
+  static cross(u, v) {
+    return new vec3(
+      u.e[1] * v.e[2] - u.e[2] * v.e[1],
+      u.e[2] * v.e[0] - u.e[0] * v.e[2],
+      u.e[0] * v.e[1] - u.e[1] * v.e[0]
+    );
+  }
+
+  static unitVector(v) {
+    return vec3u.div(v, v.length);
+  }
+}
