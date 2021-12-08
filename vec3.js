@@ -38,11 +38,11 @@ export class point3 extends vec3 {
   }
 
   get y() {
-    return this.e[0];
+    return this.e[1];
   }
 
   get z() {
-    return this.e[0];
+    return this.e[2];
   }
 }
 
@@ -52,11 +52,11 @@ export class color extends vec3 {
   }
 
   get g() {
-    return this.e[0];
+    return this.e[1];
   }
 
   get b() {
-    return this.e[0];
+    return this.e[2];
   }
 }
 
