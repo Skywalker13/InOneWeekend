@@ -1,14 +1,26 @@
 import { Ray } from "./ray.js";
-import { Color, Point3, Vec3 } from "./vec3.js";
+import { Color, Point3, Vec3, Matrix } from "./vec3.js";
 import writeColor from "./writeColor.js";
 
 const stdout = (text) => process.stdout.write(text);
 const stderr = (text) => process.stderr.write(text);
 
+function hitSphere(center, radius, r) {
+  const oc = r.origin.subNew(center);
+  const a = Matrix.dot(r.direction, r.direction);
+  const b = Matrix.dot(oc, r.direction) * 2;
+  const c = Matrix.dot(oc, oc) - radius * radius;
+  const discriminant = b * b - a * c * 4;
+  return discriminant > 0;
+}
+
 /**
  * @param {Ray} r
  */
 function rayColor(r) {
+  if (hitSphere(new Point3(0, 0, -1), 0.5, r)) {
+    return new Color(1, 0, 0);
+  }
   const unitDirection = r.direction.unitVector();
   const t = 0.5 * (unitDirection.y + 1);
   return new Color(1, 1, 1).mul(1 - t).add(new Color(0.5, 0.7, 1.0).mul(t));

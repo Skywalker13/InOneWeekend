@@ -202,7 +202,7 @@ export class Color extends Vec3 {
   }
 }
 
-export class vec3u {
+export class Matrix {
   static str(out, v) {
     return out(`${v.e[0]} ${v.e[1]} ${v.e[2]}`);
   }
