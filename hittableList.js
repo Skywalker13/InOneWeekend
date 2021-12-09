@@ -1,9 +1,12 @@
-import { Hittable } from "./hittable.js";
+import { Hittable, HitRecord } from "./hittable.js";
 
-class HittableList extends Hittable {
+export class HittableList extends Hittable {
   constructor(object) {
+    super();
     this.objects = [];
-    this.add(object);
+    if (object) {
+      this.add(object);
+    }
   }
 
   clear() {
@@ -15,7 +18,7 @@ class HittableList extends Hittable {
   }
 
   hit(r, tMin, tMax, rec) {
-    let tempRec;
+    let tempRec = new HitRecord();
     let hitAnything = false;
     let closestSoFar = tMax;
 
