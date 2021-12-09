@@ -5,12 +5,49 @@ import writeColor from "./writeColor.js";
 const stdout = (text) => process.stdout.write(text);
 const stderr = (text) => process.stderr.write(text);
 
+/**
+ * Hit sphere
+ *
+ * x² + y² + z² = R²
+ *
+ * When a point is on the sphere
+ *   x² + y² + z² = R²
+ * When a point is inside the sphere
+ *   x² + y² + z² < R²
+ * When a point is outside the sphere
+ *   x² + y² + z² > R²
+ *
+ * Formulas with origin C = (Cx, Cy, Cz)
+ *   (x - Cx)² + (y - Cy)² + (z - Cz)² = r²
+ * Same formulas with vectors P = (x, y, z)
+ *   (P - C) · (P - C) = r²
+ *
+ * Any point P that satisfies this equation is on the sphere.
+ *
+ * We can replace P by P(t): (P(t) - C) · (P(t) - C) = r²
+ * Our ray: P(t) = A + t·b
+ *
+ * The equation can be changed to:
+ *   (A + t·b - C) · (A + t·b - C) = r²
+ * We search the 0:
+ *   t²·b² + 2·t·b · (A - C) + (A - C)² - r² = 0
+ *
+ * @param {Point3} center
+ * @param {Number} radius
+ * @param {Ray} r
+ * @returns
+ */
 function hitSphere(center, radius, r) {
+  /* Legend
+   * (A - C) : is the sphere origin (r.origin - center)
+   * r       : is the radius
+   * b       : is the direction (r.direction)
+   */
   const oc = r.origin.subNew(center);
-  const a = Matrix.dot(r.direction, r.direction);
-  const b = Matrix.dot(oc, r.direction) * 2;
-  const c = Matrix.dot(oc, oc) - radius * radius;
-  const discriminant = b * b - a * c * 4;
+  const a = Matrix.dot(r.direction, r.direction); // b²
+  const b = Matrix.dot(oc, r.direction) * 2; // 2·b · (A - C)
+  const c = Matrix.dot(oc, oc) - radius * radius; // (A - C)² - r²
+  const discriminant = b * b - a * c * 4; // b² - 4·a·c
   return discriminant > 0;
 }
 

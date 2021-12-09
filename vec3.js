@@ -207,6 +207,15 @@ export class Matrix {
     return out(`${v.e[0]} ${v.e[1]} ${v.e[2]}`);
   }
 
+  /**
+   * Scalar product
+   *
+   * @static
+   * @param {Vec3} u
+   * @param {Vec3} v
+   * @returns {Number}
+   * @memberof Matrix
+   */
   static dot(u, v) {
     return u.e[0] * v.e[0] + u.e[1] * v.e[1] + u.e[2] * v.e[2];
   }
