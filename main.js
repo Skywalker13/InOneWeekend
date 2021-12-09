@@ -32,6 +32,8 @@ const stderr = (text) => process.stderr.write(text);
  * We search the 0:
  *   t²·b² + 2·t·b · (A - C) + (A - C)² - r² = 0
  *
+ * Ref. https://fr.wikipedia.org/wiki/Sph%C3%A8re#%C3%89quations
+ *
  * @param {Point3} center
  * @param {Number} radius
  * @param {Ray} r
@@ -42,6 +44,8 @@ function hitSphere(center, radius, r) {
    * (A - C) : is the sphere origin (r.origin - center)
    * r       : is the radius
    * b       : is the direction (r.direction)
+   *
+   * Ref. https://fr.wikipedia.org/wiki/%C3%89quation_du_second_degr%C3%A9#Discriminant
    */
   const oc = r.origin.sub(center);
   const a = Matrix.dot(r.direction, r.direction); // b²
@@ -51,6 +55,12 @@ function hitSphere(center, radius, r) {
   if (discriminant < 0) {
     return -1;
   }
+  /* Solutions for positive discriminant
+   *  x1 = (-b - sqrt(b² - 4·a·c)) * 1/(2·a)
+   *  x2 = (-b + sqrt(b² - 4·a·c)) * 1/(2·a)
+   *
+   * Ref. https://fr.wikipedia.org/wiki/%C3%89quation_du_second_degr%C3%A9#Discriminant_strictement_positif
+   */
   return (-b - Math.sqrt(discriminant)) / (2 * a);
 }
 
@@ -60,8 +70,8 @@ function hitSphere(center, radius, r) {
 function rayColor(r) {
   let t = hitSphere(new Point3(0, 0, -1), 0.5, r);
   if (t > 0) {
-    const N = r.at(t).sub(new Vec3(0, 0, -1)).unitVector();
-    return new Color(N.x + 1, N.y + 1, N.z + 1).mul(0.5);
+    const N = r.at(t).sub(new Vec3(0, 0, -1)).unitVector(); // retrieve the normal
+    return new Color(N.x + 1, N.y + 1, N.z + 1).mul(0.5); // colormap for the normals
   }
   const unitDirection = r.direction.unitVector();
   t = 0.5 * (unitDirection.y + 1);
