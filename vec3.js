@@ -1,3 +1,9 @@
+/**
+ * Tridimensional vector
+ *
+ * @export
+ * @class Vec3
+ */
 export class Vec3 {
   constructor(e0 = 0, e1 = 0, e2 = 0) {
     this.e = [e0, e1, e2];
@@ -7,6 +13,13 @@ export class Vec3 {
     return Vec3;
   }
 
+  /**
+   * Addition a vector to this vector.
+   *
+   * @param {Vec3} v
+   * @returns {Vec3} this
+   * @memberof Vec3
+   */
   add(v) {
     this.e[0] += v.e[0];
     this.e[1] += v.e[1];
@@ -14,11 +27,25 @@ export class Vec3 {
     return this;
   }
 
+  /**
+   * Addition a vector to this vector and returns a new vector.
+   *
+   * @param {Vec3} v
+   * @returns {Vec3} a new vector
+   * @memberof Vec3
+   */
   addNew(v) {
     const C = this.constructor[Symbol.species];
     return new C(this.e[0] + v.e[0], this.e[1] + v.e[1], this.e[2] + v.e[2]);
   }
 
+  /**
+   * Substract a vector to this vector.
+   *
+   * @param {Vec3} v
+   * @returns {Vec3} this
+   * @memberof Vec3
+   */
   sub(v) {
     this.e[0] -= v.e[0];
     this.e[1] -= v.e[1];
@@ -26,11 +53,25 @@ export class Vec3 {
     return this;
   }
 
+  /**
+   * Substract a vector to this vector and returns a new vector.
+   *
+   * @param {Vec3} v
+   * @returns {Vec3} a new vector
+   * @memberof Vec3
+   */
   subNew(v) {
     const C = this.constructor[Symbol.species];
     return new C(this.e[0] - v.e[0], this.e[1] - v.e[1], this.e[2] - v.e[2]);
   }
 
+  /**
+   * Multiply a scalar to this vector.
+   *
+   * @param {Number} t
+   * @returns {Vec3} this
+   * @memberof Vec3
+   */
   mul(t) {
     this.e[0] *= t;
     this.e[1] *= t;
@@ -38,6 +79,13 @@ export class Vec3 {
     return this;
   }
 
+  /**
+   * Multiply a vector or a scalar to this vector and returns a new vector.
+   *
+   * @param {Vec3|Number} vt
+   * @returns {Vec3} a new vector
+   * @memberof Vec3
+   */
   mulNew(vt) {
     const C = this.constructor[Symbol.species];
     let v = vt;
@@ -49,10 +97,24 @@ export class Vec3 {
     return new C(this.e[0] * v.e[0], this.e[1] * v.e[1], this.e[2] * v.e[2]);
   }
 
+  /**
+   * Divide a scalar to this vector.
+   *
+   * @param {Number} t
+   * @returns {Vec3} this
+   * @memberof Vec3
+   */
   div(t) {
     return this.mul(1 / t);
   }
 
+  /**
+   * Divide a scalar to this vector and returns a new vector.
+   *
+   * @param {Number} t
+   * @returns {Vec3} a new vector
+   * @memberof Vec3
+   */
   divNew(t) {
     return this.mulNew(1 / t);
   }
@@ -72,6 +134,13 @@ export class Vec3 {
   }
 }
 
+/**
+ * Point in a tridimensional space.
+ *
+ * @export
+ * @class Point3
+ * @extends {Vec3}
+ */
 export class Point3 extends Vec3 {
   static get [Symbol.species]() {
     return Point3;
@@ -90,19 +159,44 @@ export class Point3 extends Vec3 {
   }
 }
 
+/**
+ * True color 24 bit (RGB).
+ *
+ * @export
+ * @class Color
+ * @extends {Vec3}
+ */
 export class Color extends Vec3 {
   static get [Symbol.species]() {
     return Color;
   }
 
+  /**
+   * Red
+   *
+   * @readonly
+   * @memberof Color
+   */
   get r() {
     return this.e[0];
   }
 
+  /**
+   * Green
+   *
+   * @readonly
+   * @memberof Color
+   */
   get g() {
     return this.e[1];
   }
 
+  /**
+   * Blue
+   *
+   * @readonly
+   * @memberof Color
+   */
   get b() {
     return this.e[2];
   }
