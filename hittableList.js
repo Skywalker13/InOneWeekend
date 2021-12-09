@@ -13,6 +13,12 @@ export class HittableList extends Hittable {
     this.objects.length = 0;
   }
 
+  /**
+   * Add a new object to the hittable list.
+   *
+   * @param {Hittable} object
+   * @memberof HittableList
+   */
   add(object) {
     this.objects.push(object);
   }
