@@ -1,6 +1,10 @@
-class vec3 {
+export class Vec3 {
   constructor(e0 = 0, e1 = 0, e2 = 0) {
     this.e = [e0, e1, e2];
+  }
+
+  static get [Symbol.species]() {
+    return Vec3;
   }
 
   add(v) {
@@ -10,6 +14,23 @@ class vec3 {
     return this;
   }
 
+  addNew(v) {
+    const C = this.constructor[Symbol.species];
+    return new C(this.e[0] + v.e[0], this.e[1] + v.e[1], this.e[2] + v.e[2]);
+  }
+
+  sub(v) {
+    this.e[0] -= v.e[0];
+    this.e[1] -= v.e[1];
+    this.e[2] -= v.e[2];
+    return this;
+  }
+
+  subNew(v) {
+    const C = this.constructor[Symbol.species];
+    return new C(this.e[0] - v.e[0], this.e[1] - v.e[1], this.e[2] - v.e[2]);
+  }
+
   mul(t) {
     this.e[0] *= t;
     this.e[1] *= t;
@@ -17,8 +38,27 @@ class vec3 {
     return this;
   }
 
+  mulNew(vt) {
+    const C = this.constructor[Symbol.species];
+    let v = vt;
+
+    if (typeof vt === "number") {
+      v = new C(vt, vt, vt);
+    }
+
+    return new C(this.e[0] * v.e[0], this.e[1] * v.e[1], this.e[2] * v.e[2]);
+  }
+
   div(t) {
     return this.mul(1 / t);
+  }
+
+  divNew(t) {
+    return this.mulNew(1 / t);
+  }
+
+  unitVector() {
+    return this.divNew(this.length);
   }
 
   get length() {
@@ -32,7 +72,11 @@ class vec3 {
   }
 }
 
-export class point3 extends vec3 {
+export class Point3 extends Vec3 {
+  static get [Symbol.species]() {
+    return Point3;
+  }
+
   get x() {
     return this.e[0];
   }
@@ -46,7 +90,11 @@ export class point3 extends vec3 {
   }
 }
 
-export class color extends vec3 {
+export class Color extends Vec3 {
+  static get [Symbol.species]() {
+    return Color;
+  }
+
   get r() {
     return this.e[0];
   }
@@ -65,45 +113,15 @@ export class vec3u {
     return out(`${v.e[0]} ${v.e[1]} ${v.e[2]}`);
   }
 
-  static add(u, v) {
-    return new vec3(u.e[0] + v.e[0], u.e[1] + v.e[1], u.e[2] + v.e[2]);
-  }
-
-  static sub(u, v) {
-    return new vec3(u.e[0] - v.e[0], u.e[1] - v.e[1], u.e[2] - v.e[2]);
-  }
-
-  static mul(ut, vt) {
-    let u = ut;
-    let v = vt;
-
-    if (typeof ut === "number") {
-      u = [ut, ut, ut];
-    }
-    if (typeof vt === "number") {
-      v = [vt, vt, vt];
-    }
-
-    return new vec3(u.e[0] * v.e[0], u.e[1] * v.e[1], u.e[2] * v.e[2]);
-  }
-
-  static div(v, t) {
-    return vec3u.mul(1 / t, v);
-  }
-
   static dot(u, v) {
     return u.e[0] * v.e[0] + u.e[1] * v.e[1] + u.e[2] * v.e[2];
   }
 
   static cross(u, v) {
-    return new vec3(
+    return new Vec3(
       u.e[1] * v.e[2] - u.e[2] * v.e[1],
       u.e[2] * v.e[0] - u.e[0] * v.e[2],
       u.e[0] * v.e[1] - u.e[1] * v.e[0]
     );
-  }
-
-  static unitVector(v) {
-    return vec3u.div(v, v.length);
   }
 }

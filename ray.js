@@ -1,6 +1,9 @@
-import { vec3u } from "./vec3";
-
-export class ray {
+export class Ray {
+  /**
+   * @param {Point3} origin
+   * @param {number} direction
+   * @memberof ray
+   */
   constructor(origin, direction) {
     this.orig = origin;
     this.dir = direction;
@@ -14,7 +17,11 @@ export class ray {
     return this.dir;
   }
 
+  /**
+   * @param {number} t
+   * @returns {Point3}
+   */
   at(t) {
-    return vec3u.add(this.orig, vec3u.mul(t, this.dir));
+    return this.orig.addNew(this.dir.mulNew(t));
   }
 }
