@@ -1,8 +1,9 @@
 import { Ray } from "./ray.js";
-import { Color, Point3, Vec3 } from "./vec3.js";
+import { Color, Point3 } from "./vec3.js";
 import { HitRecord } from "./hittable.js";
 import { HittableList } from "./hittableList.js";
 import { Sphere } from "./sphere.js";
+import { Camera } from "./camera.js";
 import writeColor from "./writeColor.js";
 
 const stdout = (text) => process.stdout.write(text);
@@ -27,6 +28,7 @@ function main() {
   const aspectRatio = 16 / 9;
   const imageWidth = 400;
   const imageHeight = parseInt(imageWidth / aspectRatio);
+  const samplesPerPixel = 100;
 
   /* World */
 
@@ -36,17 +38,7 @@ function main() {
 
   /* Camera */
 
-  const viewportHeight = 2;
-  const viewportWidth = aspectRatio * viewportHeight;
-  const focalLength = 1;
-
-  const origin = new Point3(0, 0, 0);
-  const horizontal = new Vec3(viewportWidth, 0, 0);
-  const vertical = new Vec3(0, viewportHeight, 0);
-  const lowerLeftCorner = origin
-    .sub(horizontal.div(2))
-    .sub(vertical.div(2))
-    .sub(new Vec3(0, 0, focalLength));
+  const cam = new Camera();
 
   /* Render */
 
@@ -55,14 +47,14 @@ function main() {
   for (let j = imageHeight - 1; j >= 0; --j) {
     stderr(`\ncanlines remaining: ${j} `);
     for (let i = 0; i < imageWidth; ++i) {
-      const u = i / (imageWidth - 1);
-      const v = j / (imageHeight - 1);
-      const r = new Ray(
-        origin,
-        lowerLeftCorner.add(horizontal.mul(u)).add(vertical.mul(v)).sub(origin)
-      );
-      const pixelColor = rayColor(r, world);
-      writeColor(stdout, pixelColor);
+      const pixelColor = new Color(0, 0, 0);
+      for (let s = 0; s < samplesPerPixel; ++s) {
+        const u = (i + Math.random()) / (imageWidth - 1);
+        const v = (j + Math.random()) / (imageHeight - 1);
+        const r = cam.getRay(u, v);
+        pixelColor._add(rayColor(r, world));
+      }
+      writeColor(stdout, pixelColor, samplesPerPixel);
     }
   }
 
