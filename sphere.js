@@ -8,6 +8,35 @@ export class Sphere extends Hittable {
     this.radius = r;
   }
 
+  /**
+   * Hit sphere
+   *
+   * x² + y² + z² = R²
+   *
+   * When a point is on the sphere
+   *   x² + y² + z² = R²
+   * When a point is inside the sphere
+   *   x² + y² + z² < R²
+   * When a point is outside the sphere
+   *   x² + y² + z² > R²
+   *
+   * Formulas with origin C = (Cx, Cy, Cz)
+   *   (x - Cx)² + (y - Cy)² + (z - Cz)² = r²
+   * Same formulas with vectors P = (x, y, z)
+   *   (P - C) · (P - C) = r²
+   *
+   * Any point P that satisfies this equation is on the sphere.
+   *
+   * We can replace P by P(t): (P(t) - C) · (P(t) - C) = r²
+   * Our ray: P(t) = A + t·b
+   *
+   * The equation can be changed to:
+   *   (A + t·b - C) · (A + t·b - C) = r²
+   * We search the 0:
+   *   t²·b² + 2·t·b · (A - C) + (A - C)² - r² = 0
+   *
+   * Ref. https://fr.wikipedia.org/wiki/Sph%C3%A8re#%C3%89quations
+   */
   hit(r, tMin, tMax, rec) {
     /* Legend
      * (A - C) : is the sphere origin, oc = (r.origin - center)
