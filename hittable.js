@@ -1,10 +1,16 @@
-import { Point3, Vec3 } from "./vec3.js";
+import { Point3, Vec3, Matrix } from "./vec3.js";
 
 export class HitRecord {
   constructor() {
     this.p = new Point3();
     this.normal = new Vec3();
     this.t = 0;
+    this.frontFace = false;
+  }
+
+  setFaceNormal(r, outwardNormal) {
+    this.frontFace = Matrix.dot(r.direction, outwardNormal) < 0;
+    this.normal = this.frontFace ? outwardNormal : -outwardNormal;
   }
 }
 

@@ -47,7 +47,8 @@ export class Sphere extends Hittable {
 
     this.rec.t = root;
     this.rec.p = r.at(rec.t);
-    this.rec.normal = rec.p.sub(center).div(radius);
+    const outwardNormal = rec.p.sub(center).div(radius);
+    this.rec.setFaceNormal(r, outwardNormal);
 
     return true;
   }
