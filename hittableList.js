@@ -1,0 +1,32 @@
+import { Hittable } from "./hittable.js";
+
+class HittableList extends Hittable {
+  constructor(object) {
+    this.objects = [];
+    this.add(object);
+  }
+
+  clear() {
+    this.objects.length = 0;
+  }
+
+  add(object) {
+    this.objects.push(object);
+  }
+
+  hit(r, tMin, tMax, rec) {
+    let tempRec;
+    let hitAnything = false;
+    let closestSoFar = tMax;
+
+    for (const object of this.objects) {
+      if (object.hit(r, tMin, closestSoFar, tempRec)) {
+        hitAnything = true;
+        closestSoFar = tempRec.t;
+        rec.copy(tempRec);
+      }
+    }
+
+    return hitAnything;
+  }
+}

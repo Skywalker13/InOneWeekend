@@ -8,6 +8,13 @@ export class HitRecord {
     this.frontFace = false;
   }
 
+  copy(rec) {
+    this.p = rec.p;
+    this.normal = rec.normal;
+    this.t = rec.t;
+    this.frontFace = rec.frontFace;
+  }
+
   setFaceNormal(r, outwardNormal) {
     this.frontFace = Matrix.dot(r.direction, outwardNormal) < 0;
     this.normal = this.frontFace ? outwardNormal : -outwardNormal;
