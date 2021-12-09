@@ -41,27 +41,29 @@ const stderr = (text) => process.stderr.write(text);
  */
 function hitSphere(center, radius, r) {
   /* Legend
-   * (A - C) : is the sphere origin (r.origin - center)
+   * (A - C) : is the sphere origin, oc = (r.origin - center)
    * r       : is the radius
    * b       : is the direction (r.direction)
    *
    * Ref. https://fr.wikipedia.org/wiki/%C3%89quation_du_second_degr%C3%A9#Discriminant
    */
   const oc = r.origin.sub(center);
-  const a = Matrix.dot(r.direction, r.direction); // b²
-  const b = Matrix.dot(oc, r.direction) * 2; // 2·b · (A - C)
-  const c = Matrix.dot(oc, oc) - radius * radius; // (A - C)² - r²
-  const discriminant = b * b - a * c * 4; // b² - 4·a·c
+  const a = r.direction.lengthSquared; // b² = b.lengthSquared
+  const halfB = Matrix.dot(oc, r.direction); // b · (A - C)
+  const c = oc.lengthSquared - radius * radius; // (A - C)² - r² = oc.lengthSquared - r²
+  const discriminant = halfB * halfB - a * c; // (b/2)² - a·c = b² - 4·a·c
   if (discriminant < 0) {
     return -1;
   }
   /* Solutions for positive discriminant
    *  x1 = (-b - sqrt(b² - 4·a·c)) * 1/(2·a)
    *  x2 = (-b + sqrt(b² - 4·a·c)) * 1/(2·a)
+   * or
+   *  x1 = (-b/2 - sqrt(b² - 4·a·c)) * 1/a
    *
    * Ref. https://fr.wikipedia.org/wiki/%C3%89quation_du_second_degr%C3%A9#Discriminant_strictement_positif
    */
-  return (-b - Math.sqrt(discriminant)) / (2 * a);
+  return (-halfB - Math.sqrt(discriminant)) / a;
 }
 
 /**
