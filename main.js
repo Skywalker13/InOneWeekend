@@ -43,7 +43,7 @@ function hitSphere(center, radius, r) {
    * r       : is the radius
    * b       : is the direction (r.direction)
    */
-  const oc = r.origin.subNew(center);
+  const oc = r.origin.sub(center);
   const a = Matrix.dot(r.direction, r.direction); // b²
   const b = Matrix.dot(oc, r.direction) * 2; // 2·b · (A - C)
   const c = Matrix.dot(oc, oc) - radius * radius; // (A - C)² - r²
@@ -80,9 +80,9 @@ function main() {
   const horizontal = new Vec3(viewportWidth, 0, 0);
   const vertical = new Vec3(0, viewportHeight, 0);
   const lowerLeftCorner = origin
-    .subNew(horizontal.divNew(2))
-    .subNew(vertical.divNew(2))
-    .subNew(new Vec3(0, 0, focalLength));
+    .sub(horizontal.div(2))
+    .sub(vertical.div(2))
+    .sub(new Vec3(0, 0, focalLength));
 
   /* Render */
 
@@ -95,10 +95,7 @@ function main() {
       const v = j / (imageHeight - 1);
       const r = new Ray(
         origin,
-        lowerLeftCorner
-          .addNew(horizontal.mulNew(u))
-          .addNew(vertical.mulNew(v))
-          .subNew(origin)
+        lowerLeftCorner.add(horizontal.mul(u)).add(vertical.mul(v)).sub(origin)
       );
       const pixelColor = rayColor(r);
       writeColor(stdout, pixelColor);

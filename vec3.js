@@ -20,7 +20,7 @@ export class Vec3 {
    * @returns {Vec3} this
    * @memberof Vec3
    */
-  add(v) {
+  _add(v) {
     this.e[0] += v.e[0];
     this.e[1] += v.e[1];
     this.e[2] += v.e[2];
@@ -34,7 +34,7 @@ export class Vec3 {
    * @returns {Vec3} a new vector
    * @memberof Vec3
    */
-  addNew(v) {
+  add(v) {
     const C = this.constructor[Symbol.species];
     return new C(this.e[0] + v.e[0], this.e[1] + v.e[1], this.e[2] + v.e[2]);
   }
@@ -46,7 +46,7 @@ export class Vec3 {
    * @returns {Vec3} this
    * @memberof Vec3
    */
-  sub(v) {
+  _sub(v) {
     this.e[0] -= v.e[0];
     this.e[1] -= v.e[1];
     this.e[2] -= v.e[2];
@@ -60,7 +60,7 @@ export class Vec3 {
    * @returns {Vec3} a new vector
    * @memberof Vec3
    */
-  subNew(v) {
+  sub(v) {
     const C = this.constructor[Symbol.species];
     return new C(this.e[0] - v.e[0], this.e[1] - v.e[1], this.e[2] - v.e[2]);
   }
@@ -72,7 +72,7 @@ export class Vec3 {
    * @returns {Vec3} this
    * @memberof Vec3
    */
-  mul(t) {
+  _mul(t) {
     this.e[0] *= t;
     this.e[1] *= t;
     this.e[2] *= t;
@@ -86,7 +86,7 @@ export class Vec3 {
    * @returns {Vec3} a new vector
    * @memberof Vec3
    */
-  mulNew(vt) {
+  mul(vt) {
     const C = this.constructor[Symbol.species];
     let v = vt;
 
@@ -104,8 +104,8 @@ export class Vec3 {
    * @returns {Vec3} this
    * @memberof Vec3
    */
-  div(t) {
-    return this.mul(1 / t);
+  _div(t) {
+    return this._mul(1 / t);
   }
 
   /**
@@ -115,12 +115,12 @@ export class Vec3 {
    * @returns {Vec3} a new vector
    * @memberof Vec3
    */
-  divNew(t) {
-    return this.mulNew(1 / t);
+  div(t) {
+    return this.mul(1 / t);
   }
 
   unitVector() {
-    return this.divNew(this.length);
+    return this.div(this.length);
   }
 
   get length() {

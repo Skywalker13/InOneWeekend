@@ -48,6 +48,6 @@ export class Ray {
    * @returns {Point3} the vector
    */
   at(t) {
-    return this.orig.addNew(this.dir.mulNew(t));
+    return this.orig.add(this.dir.mul(t));
   }
 }
