@@ -3,11 +3,5 @@ export function degreesToRadians(degrees) {
 }
 
 export function clamp(x, min, max) {
-  if (x < min) {
-    return min;
-  }
-  if (x > max) {
-    return max;
-  }
-  return x;
+  return x < min ? min : x > max ? max : x;
 }
