@@ -48,18 +48,23 @@ function hitSphere(center, radius, r) {
   const b = Matrix.dot(oc, r.direction) * 2; // 2·b · (A - C)
   const c = Matrix.dot(oc, oc) - radius * radius; // (A - C)² - r²
   const discriminant = b * b - a * c * 4; // b² - 4·a·c
-  return discriminant > 0;
+  if (discriminant < 0) {
+    return -1;
+  }
+  return (-b - Math.sqrt(discriminant)) / (2 * a);
 }
 
 /**
  * @param {Ray} r
  */
 function rayColor(r) {
-  if (hitSphere(new Point3(0, 0, -1), 0.5, r)) {
-    return new Color(1, 0, 0);
+  let t = hitSphere(new Point3(0, 0, -1), 0.5, r);
+  if (t > 0) {
+    const N = r.at(t).sub(new Vec3(0, 0, -1)).unitVector();
+    return new Color(N.x + 1, N.y + 1, N.z + 1).mul(0.5);
   }
   const unitDirection = r.direction.unitVector();
-  const t = 0.5 * (unitDirection.y + 1);
+  t = 0.5 * (unitDirection.y + 1);
   return new Color(1, 1, 1).mul(1 - t).add(new Color(0.5, 0.7, 1.0).mul(t));
 }
 
