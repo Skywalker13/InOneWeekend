@@ -1,9 +1,11 @@
 import { Hittable } from "./hittable.js";
+import { Matrix } from "./vec3.js";
 
 export class Sphere extends Hittable {
   constructor(cen, r) {
-    this.center(cen);
-    this.radius(r);
+    super();
+    this.center = cen;
+    this.radius = r;
   }
 
   hit(r, tMin, tMax, rec) {
@@ -14,14 +16,14 @@ export class Sphere extends Hittable {
      *
      * Ref. https://fr.wikipedia.org/wiki/%C3%89quation_du_second_degr%C3%A9#Discriminant
      */
-    const oc = r.origin.sub(center);
+    const oc = r.origin.sub(this.center);
     const a = r.direction.lengthSquared; // b² = b.lengthSquared
     const halfB = Matrix.dot(oc, r.direction); // b · (A - C)
-    const c = oc.lengthSquared - radius * radius; // (A - C)² - r² = oc.lengthSquared - r²
+    const c = oc.lengthSquared - this.radius * this.radius; // (A - C)² - r² = oc.lengthSquared - r²
 
     const discriminant = halfB * halfB - a * c; // (b/2)² - a·c = b² - 4·a·c
     if (discriminant < 0) {
-      return -1;
+      return false;
     }
 
     const sqrtd = Math.sqrt(discriminant);
@@ -45,10 +47,10 @@ export class Sphere extends Hittable {
       }
     }
 
-    this.rec.t = root;
-    this.rec.p = r.at(rec.t);
-    const outwardNormal = rec.p.sub(center).div(radius);
-    this.rec.setFaceNormal(r, outwardNormal);
+    rec.t = root;
+    rec.p = r.at(rec.t);
+    const outwardNormal = rec.p.sub(this.center).div(this.radius);
+    rec.setFaceNormal(r, outwardNormal);
 
     return true;
   }
