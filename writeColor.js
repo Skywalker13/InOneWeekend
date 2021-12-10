@@ -5,9 +5,10 @@ export default function (out, pixelColor, samplesPerPixel) {
 
   /* Divide the color by the number of samples (antialiasing) */
   const scale = 1 / samplesPerPixel;
-  r *= scale;
-  g *= scale;
-  b *= scale;
+  /* Gamma correction of 2.0 */
+  r = Math.sqrt(scale * r);
+  g = Math.sqrt(scale * g);
+  b = Math.sqrt(scale * b);
 
   out(
     `${parseInt(256 * clamp(r, 0, 0.999))} ` +
