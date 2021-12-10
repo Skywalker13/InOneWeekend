@@ -1,5 +1,5 @@
 import { Ray } from "./ray.js";
-import { Vec3, Matrix } from "./vec3.js";
+import { Vec3, Matrix, Point3 } from "./vec3.js";
 
 function randomInUnitSphere() {
   while (true) {
@@ -50,14 +50,11 @@ export class Lambertian extends Material {
    * [3] const target = rec.p.add(randomInHemisphere(rec.normal));
    */
   scatter(rIn, rec, attenuation, scattered) {
-    const scatterDirection = rec.p
-      .add(rec.normal)
-      .add(randomUnitVector())
-      .sub(rec.p);
+    let scatterDirection = new Point3().add(rec.normal).add(randomUnitVector());
 
     /* Check for degenerated scatter direction */
     if (scatterDirection.nearZero()) {
-      scatterDirection = rec.normal;
+      scatterDirection = new Point3().add(rec.normal);
     }
 
     scattered.copy(new Ray(rec.p, scatterDirection));
