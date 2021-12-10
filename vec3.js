@@ -30,20 +30,6 @@ export class Vec3 {
   }
 
   /**
-   * Addition a vector to this vector.
-   *
-   * @param {Vec3} v
-   * @returns {Vec3} this
-   * @memberof Vec3
-   */
-  _add(v) {
-    this.e[0] += v.e[0];
-    this.e[1] += v.e[1];
-    this.e[2] += v.e[2];
-    return this;
-  }
-
-  /**
    * Addition a vector to this vector and returns a new vector.
    *
    * @param {Vec3} v
@@ -56,20 +42,6 @@ export class Vec3 {
   }
 
   /**
-   * Substract a vector to this vector.
-   *
-   * @param {Vec3} v
-   * @returns {Vec3} this
-   * @memberof Vec3
-   */
-  _sub(v) {
-    this.e[0] -= v.e[0];
-    this.e[1] -= v.e[1];
-    this.e[2] -= v.e[2];
-    return this;
-  }
-
-  /**
    * Substract a vector to this vector and returns a new vector.
    *
    * @param {Vec3} v
@@ -79,20 +51,6 @@ export class Vec3 {
   sub(v) {
     const C = this.constructor[Symbol.species];
     return new C(this.e[0] - v.e[0], this.e[1] - v.e[1], this.e[2] - v.e[2]);
-  }
-
-  /**
-   * Multiply a scalar to this vector.
-   *
-   * @param {Number} t
-   * @returns {Vec3} this
-   * @memberof Vec3
-   */
-  _mul(t) {
-    this.e[0] *= t;
-    this.e[1] *= t;
-    this.e[2] *= t;
-    return this;
   }
 
   /**
@@ -111,17 +69,6 @@ export class Vec3 {
     }
 
     return new C(this.e[0] * v.e[0], this.e[1] * v.e[1], this.e[2] * v.e[2]);
-  }
-
-  /**
-   * Divide a scalar to this vector.
-   *
-   * @param {Number} t
-   * @returns {Vec3} this
-   * @memberof Vec3
-   */
-  _div(t) {
-    return this._mul(1 / t);
   }
 
   /**

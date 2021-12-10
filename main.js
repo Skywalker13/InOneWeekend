@@ -69,13 +69,13 @@ function main() {
   for (let j = imageHeight - 1; j >= 0; --j) {
     stderr(`\ncanlines remaining: ${j} `);
     for (let i = 0; i < imageWidth; ++i) {
-      const pixelColor = new Color(0, 0, 0);
+      let pixelColor = new Color(0, 0, 0);
       /* Antialiasing */
       for (let s = 0; s < samplesPerPixel; ++s) {
         const u = (i + Math.random()) / (imageWidth - 1);
         const v = (j + Math.random()) / (imageHeight - 1);
         const r = cam.getRay(u, v);
-        pixelColor._add(rayColor(r, world, maxDepth));
+        pixelColor = pixelColor.add(rayColor(r, world, maxDepth));
       }
       writeColor(stdout, pixelColor, samplesPerPixel);
     }
