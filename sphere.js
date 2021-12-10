@@ -2,10 +2,19 @@ import { Hittable } from "./hittable.js";
 import { Matrix } from "./vec3.js";
 
 export class Sphere extends Hittable {
-  constructor(cen, r) {
+  /**
+   * Creates an instance of Sphere.
+   *
+   * @param {Point3} cen
+   * @param {Number} r
+   * @param {Material} m
+   * @memberof Sphere
+   */
+  constructor(cen, r, m) {
     super();
     this.center = cen;
     this.radius = r;
+    this.mat = m;
   }
 
   /**
@@ -80,6 +89,7 @@ export class Sphere extends Hittable {
     rec.p = r.at(rec.t);
     const outwardNormal = rec.p.sub(this.center).div(this.radius);
     rec.setFaceNormal(r, outwardNormal);
+    rec.mat = this.mat;
 
     return true;
   }

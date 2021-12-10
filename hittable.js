@@ -4,6 +4,7 @@ export class HitRecord {
   constructor() {
     this.p = new Point3();
     this.normal = new Vec3();
+    this.mat;
     this.t = 0;
     this.frontFace = false;
   }
