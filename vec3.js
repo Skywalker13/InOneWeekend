@@ -140,6 +140,15 @@ export class Vec3 {
     return new C(-this.e[0], -this.e[1], -this.e[2]);
   }
 
+  nearZero() {
+    const s = 1e-8;
+    return (
+      Math.abs(this.e[0]) < s &&
+      Math.abs(this.e[1]) < s &&
+      Math.abs(this.e[2]) < s
+    );
+  }
+
   unitVector() {
     return this.div(this.length);
   }
