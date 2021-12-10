@@ -25,8 +25,7 @@ function rayColor(r, world, depth) {
     const scattered = new Ray();
     const attenutation = new Color();
     if (rec.mat.scatter(r, rec, attenutation, scattered)) {
-      const color = rayColor(scattered, world, depth - 1);
-      return color.mul(attenutation);
+      return rayColor(scattered, world, depth - 1).mul(attenutation);
     }
     return new Color(0, 0, 0);
   }
