@@ -255,4 +255,8 @@ export class Matrix {
       u.e[0] * v.e[1] - u.e[1] * v.e[0]
     );
   }
+
+  static reflect(v, n) {
+    return v.sub(n.mul(2 * Matrix.dot(v, n)));
+  }
 }

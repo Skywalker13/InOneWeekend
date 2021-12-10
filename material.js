@@ -1,4 +1,5 @@
-import { Ray } from "./ray";
+import { Ray } from "./ray.js";
+import { Vec3, Matrix } from "./vec3.js";
 
 function randomInUnitSphere() {
   while (true) {
@@ -50,5 +51,25 @@ export class Lambertian extends Material {
     scattered.copy(new Ray(rec.p, scatterDirection));
     attenuation.copy(this.albedo);
     return true;
+  }
+}
+
+export class Metal extends Material {
+  /**
+   * Creates an instance of Metal material
+   *
+   * @param {Color} a
+   * @memberof Metal
+   */
+  constructor(a) {
+    super();
+    this.albedo = a;
+  }
+
+  scatter(rIn, rec, attenuation, scattered) {
+    const reflected = Matrix.reflect(rIn.direction.unitVector(), rec.normal);
+    scattered.copy(new Ray(rec.p, reflected));
+    attenuation.copy(this.albedo);
+    return Matrix.dot(scattered.direction, rec.normal) > 0;
   }
 }
