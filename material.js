@@ -35,6 +35,7 @@ export class Lambertian extends Material {
    * @memberof Lambertian
    */
   constructor(a) {
+    super();
     this.albedo = a;
   }
 
