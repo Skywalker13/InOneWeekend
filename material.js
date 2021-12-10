@@ -40,8 +40,20 @@ export class Lambertian extends Material {
     this.albedo = a;
   }
 
+  /* Diffuse renderers
+   * 1. Rejection method
+   * 2. True Lambertian reflection
+   * 3. Alternative diffuse formulation
+   *
+   * [1] const target = rec.p.add(rec.normal).add(randomInUnitSphere());
+   * [2] const target = rec.p.add(rec.normal).add(randomUnitVector());
+   * [3] const target = rec.p.add(randomInHemisphere(rec.normal));
+   */
   scatter(rIn, rec, attenuation, scattered) {
-    const scatterDirection = rec.normal.add(randomUnitVector());
+    const scatterDirection = rec.p
+      .add(rec.normal)
+      .add(randomUnitVector())
+      .sub(rec.p);
 
     /* Check for degenerated scatter direction */
     if (scatterDirection.nearZero()) {
