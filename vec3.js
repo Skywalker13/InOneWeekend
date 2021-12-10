@@ -13,6 +13,22 @@ export class Vec3 {
     return Vec3;
   }
 
+  get length() {
+    return Math.sqrt(this.lengthSquared);
+  }
+
+  get lengthSquared() {
+    return (
+      this.e[0] * this.e[0] + this.e[1] * this.e[1] + this.e[2] * this.e[2]
+    );
+  }
+
+  copy(v) {
+    this.e[0] = v.e[0];
+    this.e[1] = v.e[1];
+    this.e[2] = v.e[2];
+  }
+
   /**
    * Addition a vector to this vector.
    *
@@ -119,17 +135,20 @@ export class Vec3 {
     return this.mul(1 / t);
   }
 
+  not() {
+    const C = this.constructor[Symbol.species];
+    return new C(-this.e[0], -this.e[1], -this.e[2]);
+  }
+
   unitVector() {
     return this.div(this.length);
   }
 
-  get length() {
-    return Math.sqrt(this.lengthSquared);
-  }
-
-  get lengthSquared() {
-    return (
-      this.e[0] * this.e[0] + this.e[1] * this.e[1] + this.e[2] * this.e[2]
+  static random(min = 0, max = 1) {
+    return new Vec3(
+      Math.random() * (max - min) + min,
+      Math.random() * (max - min) + min,
+      Math.random() * (max - min) + min
     );
   }
 }
