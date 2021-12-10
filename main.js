@@ -1,5 +1,5 @@
 import { Ray } from "./ray.js";
-import { Color, Point3, Vec3 } from "./vec3.js";
+import { Color, Matrix, Point3, Vec3 } from "./vec3.js";
 import { HitRecord } from "./hittable.js";
 import { HittableList } from "./hittableList.js";
 import { Sphere } from "./sphere.js";
@@ -23,6 +23,13 @@ function randomUnitVector() {
   return randomInUnitSphere().unitVector();
 }
 
+function randomInHemisphere(normal) {
+  const inUnitSphere = randomInUnitSphere();
+  return Matrix.dot(inUnitSphere, normal) > 0
+    ? inUnitSphere
+    : inUnitSphere.not();
+}
+
 /**
  * @param {Ray} r
  */
@@ -35,7 +42,14 @@ function rayColor(r, world, depth) {
   }
 
   if (world.hit(r, 0.000001, Infinity, rec)) {
-    const target = rec.p.add(rec.normal).add(randomUnitVector());
+    /* Diffuse renderers
+     * 1. Rejection method
+     * 2. True Lambertian reflection
+     * 3. Alternative diffuse formulation
+     */
+    //const target = rec.p.add(rec.normal).add(randomInUnitSphere()); /* [1] */
+    //const target = rec.p.add(rec.normal).add(); /* [2] */
+    const target = rec.p.add(randomInHemisphere(rec.normal)); /* [3] */
     return rayColor(new Ray(rec.p, target.sub(rec.p)), world, depth - 1).mul(
       0.5
     );
