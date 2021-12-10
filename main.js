@@ -67,7 +67,7 @@ function main() {
   stdout(`P3\n${imageWidth} ${imageHeight}\n255\n`);
 
   for (let j = imageHeight - 1; j >= 0; --j) {
-    stderr(`\ncanlines remaining: ${j} `);
+    stderr(`\nScanlines remaining: ${j} `);
     for (let i = 0; i < imageWidth; ++i) {
       let pixelColor = new Color(0, 0, 0);
       /* Antialiasing */
