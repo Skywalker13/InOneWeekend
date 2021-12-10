@@ -19,6 +19,10 @@ function randomInUnitSphere() {
   }
 }
 
+function randomUnitVector() {
+  return randomInUnitSphere().unitVector();
+}
+
 /**
  * @param {Ray} r
  */
@@ -31,7 +35,7 @@ function rayColor(r, world, depth) {
   }
 
   if (world.hit(r, 0.000001, Infinity, rec)) {
-    const target = rec.p.add(rec.normal).add(randomInUnitSphere());
+    const target = rec.p.add(rec.normal).add(randomUnitVector());
     return rayColor(new Ray(rec.p, target.sub(rec.p)), world, depth - 1).mul(
       0.5
     );
