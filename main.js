@@ -4,31 +4,11 @@ import { HitRecord } from "./hittable.js";
 import { HittableList } from "./hittableList.js";
 import { Sphere } from "./sphere.js";
 import { Camera } from "./camera.js";
+import { Lambertian, Metal } from "./material.js";
 import writeColor from "./writeColor.js";
 
 const stdout = (text) => process.stdout.write(text);
 const stderr = (text) => process.stderr.write(text);
-
-function randomInUnitSphere() {
-  while (true) {
-    const p = Vec3.random(-1, 1);
-    if (p.lengthSquared >= 1) {
-      continue;
-    }
-    return p;
-  }
-}
-
-function randomUnitVector() {
-  return randomInUnitSphere().unitVector();
-}
-
-function randomInHemisphere(normal) {
-  const inUnitSphere = randomInUnitSphere();
-  return Matrix.dot(inUnitSphere, normal) > 0
-    ? inUnitSphere
-    : inUnitSphere.not();
-}
 
 /**
  * @param {Ray} r
@@ -42,17 +22,13 @@ function rayColor(r, world, depth) {
   }
 
   if (world.hit(r, 0.000001, Infinity, rec)) {
-    /* Diffuse renderers
-     * 1. Rejection method
-     * 2. True Lambertian reflection
-     * 3. Alternative diffuse formulation
-     */
-    //const target = rec.p.add(rec.normal).add(randomInUnitSphere()); /* [1] */
-    //const target = rec.p.add(rec.normal).add(); /* [2] */
-    const target = rec.p.add(randomInHemisphere(rec.normal)); /* [3] */
-    return rayColor(new Ray(rec.p, target.sub(rec.p)), world, depth - 1).mul(
-      0.5
-    );
+    const scattered = new Ray();
+    const attenutation = new Color();
+    if (rec.mat.scatter(r, rec, attenutation, scattered)) {
+      const color = rayColor(scattered, world, depth - 1);
+      return color.mul(attenutation);
+    }
+    return new Color(0, 0, 0);
   }
   const unitDirection = r.direction.unitVector();
   const t = 0.5 * (unitDirection.y + 1);
@@ -71,8 +47,16 @@ function main() {
   /* World */
 
   const world = new HittableList();
-  world.add(new Sphere(new Point3(0, 0, -1), 0.5));
-  world.add(new Sphere(new Point3(0, -100.5, -1), 100));
+
+  const materialGround = new Lambertian(new Color(0.8, 0.8, 0.0));
+  const materialCenter = new Lambertian(new Color(0.7, 0.3, 0.3));
+  const materialLeft = new Metal(new Color(0.8, 0.8, 0.8));
+  const materialRight = new Metal(new Color(0.8, 0.6, 0.2));
+
+  world.add(new Sphere(new Point3(0.0, -100.5, -1.0), 100.0, materialGround));
+  world.add(new Sphere(new Point3(0.0, 0.0, -1.0), 0.5, materialCenter));
+  world.add(new Sphere(new Point3(-1.0, 0.0, -1.0), 0.5, materialLeft));
+  world.add(new Sphere(new Point3(1.0, 0.0, -1.0), 0.5, materialRight));
 
   /* Camera */
 
