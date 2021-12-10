@@ -31,6 +31,11 @@ export class Ray {
     return this.dir;
   }
 
+  copy(r) {
+    this.orig = r.orig;
+    this.dir = r.dir;
+  }
+
   /**
    * Retrieve a vector at a point along the ray.
    *
