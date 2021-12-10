@@ -30,7 +30,7 @@ function rayColor(r, world, depth) {
     return new Color(0, 0, 0);
   }
 
-  if (world.hit(r, 0, Infinity, rec)) {
+  if (world.hit(r, 0.000001, Infinity, rec)) {
     const target = rec.p.add(rec.normal).add(randomInUnitSphere());
     return rayColor(new Ray(rec.p, target.sub(rec.p)), world, depth - 1).mul(
       0.5
