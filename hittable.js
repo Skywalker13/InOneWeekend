@@ -18,6 +18,7 @@ export class HitRecord {
   copy(rec) {
     this.p.copy(rec.p);
     this.normal.copy(rec.normal);
+    this.mat = rec.mat;
     this.t = rec.t;
     this.frontFace = rec.frontFace;
   }
