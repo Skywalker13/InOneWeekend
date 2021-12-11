@@ -1,5 +1,5 @@
 import { Ray } from "./ray.js";
-import { Vec3, Matrix, Point3 } from "./vec3.js";
+import { Vec3, Matrix, Point3, Color } from "./vec3.js";
 
 function randomInUnitSphere() {
   while (true) {
@@ -84,5 +84,27 @@ export class Metal extends Material {
     );
     attenuation.copy(this.albedo);
     return Matrix.dot(scattered.direction, rec.normal) > 0;
+  }
+}
+
+export class Dielectric extends Material {
+  constructor(indexOfRefraction) {
+    super();
+    this.ir = indexOfRefraction;
+  }
+
+  scatter(rIn, rec, attenuation, scattered) {
+    attenuation.copy(new Color(1, 1, 1));
+    const refractionRatio = rec.frontFace ? 1 / this.ir : this.ir;
+
+    const unitDirection = rIn.direction.unitVector();
+    const refracted = Matrix.refract(
+      unitDirection,
+      rec.normal,
+      refractionRatio
+    );
+
+    scattered.copy(new Ray(rec.p, refracted));
+    return true;
   }
 }

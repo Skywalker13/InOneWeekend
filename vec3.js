@@ -206,4 +206,13 @@ export class Matrix {
   static reflect(v, n) {
     return v.sub(n.mul(2 * Matrix.dot(v, n)));
   }
+
+  static refract(uv, n, etaiOverStat) {
+    const cosTheta = Math.min(Matrix.dot(uv.not(), n), 1.0);
+    const rOutPerp = uv.add(n.mul(cosTheta)).mul(etaiOverStat);
+    const rOutParallel = n.mul(
+      -Math.sqrt(Math.abs(1.0 - rOutPerp.lengthSquared))
+    );
+    return rOutPerp.add(rOutParallel);
+  }
 }

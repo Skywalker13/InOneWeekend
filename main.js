@@ -4,7 +4,7 @@ import { HitRecord } from "./hittable.js";
 import { HittableList } from "./hittableList.js";
 import { Sphere } from "./sphere.js";
 import { Camera } from "./camera.js";
-import { Lambertian, Metal } from "./material.js";
+import { Dielectric, Lambertian, Metal } from "./material.js";
 import writeColor from "./writeColor.js";
 
 const stdout = (text) => process.stdout.write(text);
@@ -48,8 +48,8 @@ function main() {
   const world = new HittableList();
 
   const materialGround = new Lambertian(new Color(0.8, 0.8, 0.0));
-  const materialCenter = new Lambertian(new Color(0.7, 0.3, 0.3));
-  const materialLeft = new Metal(new Color(0.8, 0.8, 0.8), 0.3);
+  const materialCenter = new Dielectric(1.5);
+  const materialLeft = new Dielectric(1.5);
   const materialRight = new Metal(new Color(0.8, 0.6, 0.2), 1.0);
 
   world.add(new Sphere(new Point3(0.0, -100.5, -1.0), 100.0, materialGround));
