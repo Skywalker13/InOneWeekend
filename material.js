@@ -98,13 +98,19 @@ export class Dielectric extends Material {
     const refractionRatio = rec.frontFace ? 1 / this.ir : this.ir;
 
     const unitDirection = rIn.direction.unitVector();
-    const refracted = Matrix.refract(
-      unitDirection,
-      rec.normal,
-      refractionRatio
-    );
+    const cosTheta = Math.min(Matrix.dot(unitDirection.not(), rec.normal), 1.0);
+    const sinTheta = Math.sqrt(1.0 - cosTheta * cosTheta);
 
-    scattered.copy(new Ray(rec.p, refracted));
+    const cannotRefract = refractionRatio * sinTheta > 1.0;
+    let direction = new Vec3();
+
+    if (cannotRefract) {
+      direction = Matrix.reflect(unitDirection, rec.normal);
+    } else {
+      direction = Matrix.refract(unitDirection, rec.normal, refractionRatio);
+    }
+
+    scattered.copy(new Ray(rec.p, direction));
     return true;
   }
 }
