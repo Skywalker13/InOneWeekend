@@ -1,11 +1,21 @@
 import { Ray } from "./ray.js";
 import { Point3, Vec3 } from "./vec3.js";
+import { degreesToRadians } from "./utils.js";
 
 export class Camera {
-  constructor() {
-    const aspectRatio = 16 / 9;
-    const viewportHeight = 2;
+  /**
+   * Creates an instance of Camera.
+   *
+   * @param {*} vfov vertical field-of-view in degrees
+   * @param {*} aspectRatio
+   * @memberof Camera
+   */
+  constructor(vfov, aspectRatio) {
+    const theta = degreesToRadians(vfov);
+    const h = Math.tan(theta / 2);
+    const viewportHeight = 2 * h;
     const viewportWidth = aspectRatio * viewportHeight;
+
     const focalLength = 1;
 
     this.origin = new Point3(0, 0, 0);
