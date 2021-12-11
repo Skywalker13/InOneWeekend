@@ -67,17 +67,21 @@ export class Metal extends Material {
   /**
    * Creates an instance of Metal material
    *
-   * @param {Color} a
+   * @param {Color} a attenuation
+   * @param {Number} f fuzziness
    * @memberof Metal
    */
-  constructor(a) {
+  constructor(a, f) {
     super();
     this.albedo = a;
+    this.fuzz = f;
   }
 
   scatter(rIn, rec, attenuation, scattered) {
     const reflected = Matrix.reflect(rIn.direction.unitVector(), rec.normal);
-    scattered.copy(new Ray(rec.p, reflected));
+    scattered.copy(
+      new Ray(rec.p, reflected.add(randomInUnitSphere().mul(this.fuzz)))
+    );
     attenuation.copy(this.albedo);
     return Matrix.dot(scattered.direction, rec.normal) > 0;
   }
