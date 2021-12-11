@@ -104,7 +104,10 @@ export class Dielectric extends Material {
     const cannotRefract = refractionRatio * sinTheta > 1.0;
     let direction = new Vec3();
 
-    if (cannotRefract) {
+    if (
+      cannotRefract ||
+      Dielectric.reflectance(cosTheta, refractionRatio) > Math.random()
+    ) {
       direction = Matrix.reflect(unitDirection, rec.normal);
     } else {
       direction = Matrix.refract(unitDirection, rec.normal, refractionRatio);
@@ -112,5 +115,20 @@ export class Dielectric extends Material {
 
     scattered.copy(new Ray(rec.p, direction));
     return true;
+  }
+
+  /**
+   * Christophe Schlick approximation for reflectance
+   *
+   * @static
+   * @param {Number} cosine
+   * @param {Number} refIdx
+   * @returns {Number}
+   * @memberof Dielectric
+   */
+  static reflectance(cosine, refIdx) {
+    let r0 = (1 - refIdx) / (1 + refIdx);
+    r0 = r0 * r0;
+    return r0 + (1 - r0) * Math.pow(1 - cosine, 5);
   }
 }
