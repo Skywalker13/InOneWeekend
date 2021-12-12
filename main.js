@@ -1,5 +1,5 @@
 import { Ray } from "./ray.js";
-import { Color, Matrix, Point3, Vec3 } from "./vec3.js";
+import { Color, Point3, Vec3 } from "./vec3.js";
 import { HitRecord } from "./hittable.js";
 import { HittableList } from "./hittableList.js";
 import { Sphere } from "./sphere.js";

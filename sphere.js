@@ -1,5 +1,5 @@
 import { Hittable } from "./hittable.js";
-import { Matrix } from "./vec3.js";
+import { dot } from "./utils.js";
 
 export class Sphere extends Hittable {
   /**
@@ -56,7 +56,7 @@ export class Sphere extends Hittable {
      */
     const oc = r.origin.sub(this.center);
     const a = r.direction.lengthSquared; // b² = b.lengthSquared
-    const halfB = Matrix.dot(oc, r.direction); // b · (A - C)
+    const halfB = dot(oc, r.direction); // b · (A - C)
     const c = oc.lengthSquared - this.radius * this.radius; // (A - C)² - r² = oc.lengthSquared - r²
 
     const discriminant = halfB * halfB - a * c; // (b/2)² - a·c = b² - 4·a·c

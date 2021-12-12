@@ -1,4 +1,5 @@
-import { Point3, Vec3, Matrix } from "./vec3.js";
+import { Point3, Vec3 } from "./vec3.js";
+import { dot } from "./utils.js";
 
 export class HitRecord {
   constructor() {
@@ -31,7 +32,7 @@ export class HitRecord {
    * @memberof HitRecord
    */
   setFaceNormal(r, outwardNormal) {
-    this.frontFace = Matrix.dot(r.direction, outwardNormal) < 0;
+    this.frontFace = dot(r.direction, outwardNormal) < 0;
     this.normal = this.frontFace ? outwardNormal : outwardNormal.not();
   }
 }

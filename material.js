@@ -1,5 +1,6 @@
 import { Ray } from "./ray.js";
-import { Vec3, Matrix, Point3, Color } from "./vec3.js";
+import { Vec3, Point3, Color } from "./vec3.js";
+import { dot, reflect, refract } from "./utils.js";
 
 function randomInUnitSphere() {
   while (true) {
@@ -17,9 +18,7 @@ function randomUnitVector() {
 
 function randomInHemisphere(normal) {
   const inUnitSphere = randomInUnitSphere();
-  return Matrix.dot(inUnitSphere, normal) > 0
-    ? inUnitSphere
-    : inUnitSphere.not();
+  return dot(inUnitSphere, normal) > 0 ? inUnitSphere : inUnitSphere.not();
 }
 
 export class Material {
@@ -78,12 +77,12 @@ export class Metal extends Material {
   }
 
   scatter(rIn, rec, attenuation, scattered) {
-    const reflected = Matrix.reflect(rIn.direction.unitVector(), rec.normal);
+    const reflected = reflect(rIn.direction.unitVector(), rec.normal);
     scattered.copy(
       new Ray(rec.p, reflected.add(randomInUnitSphere().mul(this.fuzz)))
     );
     attenuation.copy(this.albedo);
-    return Matrix.dot(scattered.direction, rec.normal) > 0;
+    return dot(scattered.direction, rec.normal) > 0;
   }
 }
 
@@ -98,7 +97,7 @@ export class Dielectric extends Material {
     const refractionRatio = rec.frontFace ? 1 / this.ir : this.ir;
 
     const unitDirection = rIn.direction.unitVector();
-    const cosTheta = Math.min(Matrix.dot(unitDirection.not(), rec.normal), 1.0);
+    const cosTheta = Math.min(dot(unitDirection.not(), rec.normal), 1.0);
     const sinTheta = Math.sqrt(1.0 - cosTheta * cosTheta);
 
     const cannotRefract = refractionRatio * sinTheta > 1.0;
@@ -108,9 +107,9 @@ export class Dielectric extends Material {
       cannotRefract ||
       Dielectric.reflectance(cosTheta, refractionRatio) > Math.random()
     ) {
-      direction = Matrix.reflect(unitDirection, rec.normal);
+      direction = reflect(unitDirection, rec.normal);
     } else {
-      direction = Matrix.refract(unitDirection, rec.normal, refractionRatio);
+      direction = refract(unitDirection, rec.normal, refractionRatio);
     }
 
     scattered.copy(new Ray(rec.p, direction));

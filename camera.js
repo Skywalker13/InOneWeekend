@@ -1,6 +1,7 @@
 import { Ray } from "./ray.js";
-import { Matrix, Point3, Vec3 } from "./vec3.js";
+import { Point3, Vec3 } from "./vec3.js";
 import { degreesToRadians } from "./utils.js";
+import { cross } from "./utils.js";
 
 function random(min = 0, max = 1) {
   return Math.random() * (max - min) + min;
@@ -36,8 +37,8 @@ export class Camera {
     const viewportWidth = aspectRatio * viewportHeight;
 
     this.w = lookfrom.sub(lookat).unitVector();
-    this.u = Matrix.cross(vup, this.w).unitVector();
-    this.v = Matrix.cross(this.w, this.u);
+    this.u = cross(vup, this.w).unitVector();
+    this.v = cross(this.w, this.u);
 
     this.origin = lookfrom;
     this.horizontal = this.u.mul(viewportWidth).mul(focusDist);
