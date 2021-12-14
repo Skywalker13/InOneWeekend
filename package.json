@@ -9,5 +9,8 @@
   },
   "author": "Mathieu Schroeter",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "xpixmap": "^0.0.3"
+  }
 }
